@@ -17,48 +17,43 @@ if ($_POST) {
   }
 }
 
+require_once("_header.php");
 ?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>University of Tabun</title>
-  </head>
-  <body>
-    <p>
-      <a href="index.php">Home</a>
-    </p>
+<p>
+  <a href="index.php">Home</a>
+</p>
+<div>
+  <form action="edit.php" method="post">
+    <?php
+      if (isset($_GET['id']) || isset($_POST['id'])) {
+        $id = (isset($_GET['id'])) ? $_GET['id'] : $_POST['id'];
+
+        $sql = "SELECT * FROM students WHERE id = " . $id;
+        foreach ($pdo->query($sql) as $row) {
+          echo "<div>";
+          echo "<label>Name:</label>";
+          echo "<input type='text' name='name' value=" . $row['name'] . ">";
+          echo "</div>";
+          echo "<div>";
+          echo "<label>Age:</label>";
+          echo "<input type='text' name='age' value=" . $row['age'] . ">";
+          echo "</div>";
+          echo "<div>";
+          echo "<label>E-mail:</label>";
+          echo "<input type='text' name='email' value=" . $row['email'] . ">";
+          echo "</div>";
+        }
+
+        echo "<input type='hidden' name='id' value=" . $id . ">"; 
+        $pdo = null;
+      }
+    ?>
     <div>
-      <form action="edit.php" method="post">
-        <?php
-          if (isset($_GET['id']) || isset($_POST['id'])) {
-            $id = (isset($_GET['id'])) ? $_GET['id'] : $_POST['id'];
-
-            $sql = "SELECT * FROM students WHERE id = " . $id;
-            foreach ($pdo->query($sql) as $row) {
-              echo "<div>";
-              echo "<label>Name:</label>";
-              echo "<input type='text' name='name' value=" . $row['name'] . ">";
-              echo "</div>";
-              echo "<div>";
-              echo "<label>Age:</label>";
-              echo "<input type='text' name='age' value=" . $row['age'] . ">";
-              echo "</div>";
-              echo "<div>";
-              echo "<label>E-mail:</label>";
-              echo "<input type='text' name='email' value=" . $row['email'] . ">";
-              echo "</div>";
-            }
-
-            echo "<input type='hidden' name='id' value=" . $id . ">"; 
-            $pdo = null;
-          }
-        ?>
-        <div>
-          <button type="submit">Update</button>
-          <?php echo ($success) ? "<p>Successfully updated record! <a href='index.php'>Check record/s</a></p>" : '' ?>
-        </div>
-      </form>
+      <button type="submit">Update</button>
+      <?php echo ($success) ? "<p>Successfully updated record! <a href='index.php'>Check record/s</a></p>" : '' ?>
     </div>
-  </body>
-</html>
+  </form>
+</div>
+<?php
+require_once("_footer.php");
+?>
